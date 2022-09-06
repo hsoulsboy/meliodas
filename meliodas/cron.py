@@ -9,7 +9,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 {minute} {hour} {day_of_month} {month} {day_of_week} root {job_command}
 """
 
-CRON_JOB = "{minute} {hour} {day_of_month} {month} {day_of_week} root {job_command}"
+CRON_JOB = "\n{minute} {hour} {day_of_month} {month} {day_of_week} root {job_command}"
 
 def configureCronJob(args):
     # Check if the user has root privileges
@@ -41,7 +41,39 @@ def configureCronJob(args):
         )
 
 def listCronJobs(args):
+    if not os.path.exists("/etc/cron.d/meliodas"):
+        print("No cron jobs are set.")
+        sys.exit(0)
+
     with open("/etc/cron.d/meliodas") as f:
-        for i, line in enumerate(f):
+        counter = 1
+        for line in f:
             if "root" in line:
-                print(f"Cron Job[{i}] = {line}")
+                print(f"Cron Job ID: {counter}")
+                
+                print("Configured job:")
+                if args.pretty:
+                    minute, hour, day_of_month, month, day_of_week, user, job_command = parseCronJob(line)
+
+                    print(f"Hour: {hour}")
+                    print(f"Minute: {minute}")
+                    print(f"Day of Week: {day_of_week}")
+                    print(f"Day of Month: {day_of_month}")
+                    print(f"Month: {month}")
+                    print(f"User: {user}")
+
+                    job = " ".join(job_command)
+                    print(f"Job Command: {job}")
+
+                    print("---------------------")
+                else:
+                    print(line)
+
+                    print("---------------------")
+
+                counter += 1
+
+def parseCronJob(job):
+    minute, hour, day_of_month, month, day_of_week, user = job.split(" ")[:6]
+    job_command = job.split(" ")[6:]
+    return minute, hour, day_of_month, month, day_of_week, user, job_command
