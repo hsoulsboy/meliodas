@@ -1,4 +1,6 @@
 import argparse
+import sys
+
 from meliodas.parsers.create import create_parser
 from meliodas.parsers.list import list_parser
 
@@ -17,7 +19,11 @@ def main():
     parser_list.set_defaults(func=listCronJobs)
 
     args = parser.parse_args()
-    args.func(args)
+
+    if len(sys.argv) > 1:
+        args.func(args)
+    else:
+        parser.print_help()
 
 if __name__ == "__main__":
     main()
