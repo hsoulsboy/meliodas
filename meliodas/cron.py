@@ -41,6 +41,10 @@ def configureCronJob(args):
         )
 
 def listCronJobs(args):
+    if not os.path.exists("/etc/cron.d/meliodas"):
+        print("No cron jobs are set.")
+        sys.exit(0)
+
     with open("/etc/cron.d/meliodas") as f:
         for i, line in enumerate(f):
             if "root" in line:
