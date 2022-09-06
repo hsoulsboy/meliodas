@@ -50,6 +50,30 @@ def listCronJobs(args):
         for line in f:
             if "root" in line:
                 print(f"Cron Job ID: {counter}")
+                
                 print("Configured job:")
-                print(line)
+                if args.pretty:
+                    minute, hour, day_of_month, month, day_of_week, user, job_command = parseCronJob(line)
+
+                    print(f"Hour: {hour}")
+                    print(f"Minute: {minute}")
+                    print(f"Day of Week: {day_of_week}")
+                    print(f"Day of Month: {day_of_month}")
+                    print(f"Month: {month}")
+                    print(f"User: {user}")
+
+                    job = " ".join(job_command)
+                    print(f"Job Command: {job}")
+
+                    print("---------------------")
+                else:
+                    print(line)
+
+                    print("---------------------")
+
                 counter += 1
+
+def parseCronJob(job):
+    minute, hour, day_of_month, month, day_of_week, user = job.split(" ")[:6]
+    job_command = job.split(" ")[6:]
+    return minute, hour, day_of_month, month, day_of_week, user, job_command
