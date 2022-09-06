@@ -9,7 +9,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 {minute} {hour} {day_of_month} {month} {day_of_week} root {job_command}
 """
 
-CRON_JOB = "{minute} {hour} {day_of_month} {month} {day_of_week} root {job_command}"
+CRON_JOB = "\n{minute} {hour} {day_of_month} {month} {day_of_week} root {job_command}"
 
 def configureCronJob(args):
     # Check if the user has root privileges
@@ -46,6 +46,10 @@ def listCronJobs(args):
         sys.exit(0)
 
     with open("/etc/cron.d/meliodas") as f:
-        for i, line in enumerate(f):
+        counter = 1
+        for line in f:
             if "root" in line:
-                print(f"Cron Job[{i}] = {line}")
+                print(f"Cron Job ID: {counter}")
+                print("Configured job:")
+                print(line)
+                counter += 1
