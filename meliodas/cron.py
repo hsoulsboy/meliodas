@@ -12,10 +12,9 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 CRON_JOB = "\n{minute} {hour} {day_of_month} {month} {day_of_week} root {job_command}"
 
 def configureCronJob(args):
-    # Check if the user has root privileges
+    # Run it with sudo if the user has no root privileges
     if os.geteuid() != 0:
-        print("The user doesn't have root privileges. Run the program with 'sudo'.")
-        sys.exit(1)
+        os.execvp('sudo', ['sudo', 'python3'] + sys.argv)
 
     if not os.path.exists("/etc/cron.d/meliodas"):
         with open("/etc/cron.d/meliodas", "w") as f:
