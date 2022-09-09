@@ -9,7 +9,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 {minute} {hour} {day_of_month} {month} {day_of_week} root {job_command}
 """
 
-CRON_JOB = "\n{minute} {hour} {day_of_month} {month} {day_of_week} root {job_command}"
+CRON_JOB = "{minute} {hour} {day_of_month} {month} {day_of_week} root {job_command}\n"
 
 def configureCronJob(args):
     # Run it with sudo if the user has no root privileges
